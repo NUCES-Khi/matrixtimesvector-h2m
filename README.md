@@ -2,9 +2,9 @@
 ## Team Members
 |std_id|Name|
 |--------|-|
-|k20-1234|Amjad Sajid|
-|k20-4321|Majid Sajid|
-|k20-2143|Sajjaad Sajid|
+|k21-3006|Mohib Ahmed|
+|k21-3062|Hairam Naseem|
+|k21-3006|Haris Jamal|
 
 ## Assingment 1 ##
 Status: **In progress**
