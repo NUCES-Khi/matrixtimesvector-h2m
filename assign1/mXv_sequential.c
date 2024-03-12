@@ -81,9 +81,12 @@ double *matrixVectorMultiply(double **matrix, double *vector, int size) {
 }
 
 void displayVector(double *vector, int size) {
+    printf("[");
     for (int i = 0; i < size; i++) {
-        printf("%f ", vector[i]);
+        printf(", %f ", vector[i]);
     }
+        printf(" ]");
+
     printf("\n");
 }
 
@@ -91,7 +94,7 @@ void displayVector(double *vector, int size) {
 
 int main(int argc, char* argv[]){
 
-if (argc!=3){
+if (argc!=2){
   fprintf(stderr,"Usage: %s <matrix_size>\n",argv[0]);
   return EXIT_FAILURE;
 }
