@@ -1,6 +1,13 @@
 # Assignment 1
 ## Team Members
-//-- place table as shown in main readme.md file --//
+# PDC Assignments and Projects
+## Team Members
+|std_id|Name|
+|--------|-|
+|k21-3006|Mohib Ahmed|
+|k21-3062|Hairam Naseem|
+|k21-3061|Haris Jamal|
+
 ## Output Screenshots
 //-- Add output screenshots here. --//
 ## Results and Analysis
