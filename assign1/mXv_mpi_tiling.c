@@ -64,7 +64,7 @@ void matrixVectorMultiply(double **matrix, double *vector, double *result, int r
 
 int main(int argc, char *argv[]) {
     int rank, size;
-    int rows, cols;
+   
 
     // Initialize MPI
     MPI_Init(&argc, &argv);
@@ -72,47 +72,46 @@ int main(int argc, char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     // Parse command line arguments
-    if (argc != 3) {
+    if (argc != 2) {
         if (rank == 0) {
-            fprintf(stderr, "Usage: %s <rows> <cols>\n", argv[0]);
+            fprintf(stderr, "Usage: %s <size>\n", argv[0]);
         }
         MPI_Finalize();
         return EXIT_FAILURE;
     }
 
-    rows = atoi(argv[1]);
-    cols = atoi(argv[2]);
+    size = atoi(argv[1]);
 
     // Allocate memory for matrix, vector, and result
-    double **matrix = allocateMatrix(rows, cols);
-    double *vector = allocateVector(cols);
-    double *result = allocateVector(rows);
+    double **matrix = allocateMatrix(size, size);
+    double *vector = allocateVector(size);
+    double *result = allocateVector(size);
 
     // Fill matrix and vector with random values
     if (rank == 0) {
-        fillMatrixRandom(matrix, rows, cols);
-        fillVectorRandom(vector, cols);
+        fillMatrixRandom(matrix, size, size);
+        fillVectorRandom(vector, size);
     }
 
     // Broadcast vector data to all processes
-    MPI_Bcast(vector, cols, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(vector, size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Perform matrix-vector multiplication
-    matrixVectorMultiply(matrix, vector, result, rows, cols, rank, size);
+    matrixVectorMultiply(matrix, vector, result, size, size, rank, size);
 
     // Allocate memory for the receive buffer
     double *recv_buffer = NULL;
     if (rank == 0) {
-        recv_buffer = malloc(rows * sizeof(double));
+        recv_buffer = malloc(size * sizeof(double));
     }
 
     // Gather results from all processes
-    MPI_Gather(result, rows / size, MPI_DOUBLE, recv_buffer, rows / size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(result, size / size, MPI_DOUBLE, recv_buffer, size / size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     // Print result
     if (rank == 0) {
         printf("Resultant vector:\n");
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < size; i++) {
             printf("%f ", recv_buffer[i]);
         }
         printf("\n");
@@ -120,7 +119,7 @@ int main(int argc, char *argv[]) {
 
     // Free allocated memory
     free(recv_buffer);
-    freeMatrix(matrix, rows);
+    freeMatrix(matrix, size);
     freeVector(vector);
     freeVector(result);
 

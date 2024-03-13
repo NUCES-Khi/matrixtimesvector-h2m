@@ -1,40 +1,38 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 #include <time.h>
 
-void matrixVectorMultiplyOpenMPTiling(int *matrix, int *vector, int *result, int rows, int cols, int tile_size) {
+void matrixVectorMultiplyOpenMPTiling(int *matrix, int *vector, int *result, int size, int tile_size) {
     #pragma omp parallel for
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i < size; i++) {
         result[i] = 0;
-        for (int j = 0; j < cols; j++) {
-            result[i] += matrix[i * cols + j] * vector[j];
+        for (int j = 0; j < size; j++) {
+            result[i] += matrix[i * size + j] * vector[j];
         }
     }
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        printf("Usage: %s <matrix_size> <vector_size>\n", argv[0]);
+    if (argc != 2) {
+        printf("Usage: %s <size>\n", argv[0]);
         return 1;
     }
 
-    int matrix_size = atoi(argv[1]);
-    int vector_size = atoi(argv[2]);
+    int size = atoi(argv[1]);
 
-    int *matrix = (int *)malloc(matrix_size * vector_size * sizeof(int));
-    int *vector = (int *)malloc(vector_size * sizeof(int));
-    int *result = (int *)malloc(matrix_size * sizeof(int));
+    int *matrix = (int *)malloc(size * size * sizeof(int));
+    int *vector = (int *)malloc(size * sizeof(int));
+    int *result = (int *)malloc(size * sizeof(int));
 
     srand(time(NULL));
 
     // Fill matrix and vector with random values
-    for (int i = 0; i < matrix_size * vector_size; i++) {
+    for (int i = 0; i < size * size; i++) {
         matrix[i] = rand() % 10;
     }
 
-    for (int i = 0; i < vector_size; i++) {
+    for (int i = 0; i < size; i++) {
         vector[i] = rand() % 10; 
     }
 
@@ -42,15 +40,15 @@ int main(int argc, char *argv[]) {
 
     // Apply tiling to the matrix
     #pragma omp parallel for
-    for (int i = 0; i < matrix_size; i += tile_size) {
-        for (int j = 0; j < vector_size; j += tile_size) {
-            matrixVectorMultiplyOpenMPTiling(matrix, vector, result, matrix_size, vector_size, tile_size);
+    for (int i = 0; i < size; i += tile_size) {
+        for (int j = 0; j < size; j += tile_size) {
+            matrixVectorMultiplyOpenMPTiling(matrix, vector, result, size, tile_size);
         }
     }
 
     // Print the result
     printf("Resultant vector:\n");
-    for (int i = 0; i < matrix_size; i++) {
+    for (int i = 0; i < size; i++) {
         printf("%d ", result[i]);
     }
     printf("\n");
