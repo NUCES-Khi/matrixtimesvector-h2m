@@ -7,7 +7,7 @@
 |k21-3061|Haris Jamal|
 
 ## Assingment 1 ##
-Status: **In progress**
+Status: **completed**
 //--Change the status to complete once your assignment is completed and you think it can be marked. --//
 
 ## Assignment 2 ##
